@@ -6,56 +6,56 @@ const mongoTransaction = async () => {
   console.log(">>>>>>>>>S")
   const collectionName = "benchmark"
 
-  // delete all
-  await mongoClient.db().dropCollection(collectionName)
+  // // delete all
+  // await mongoClient.db().dropCollection(collectionName)
 
-  // create collection
-  await mongoClient.db().createCollection(collectionName)
+  // // create collection
+  // await mongoClient.db().createCollection(collectionName)
 
-  const collection = mongoClient.db().collection("benchmark")
-  console.log(">>>>>>>>>>>>>>>")
-  console.time("dbsave")
+  // const collection = mongoClient.db().collection("benchmark")
+  // console.log(">>>>>>>>>>>>>>>")
+  // console.time("dbsave")
 
-  const session = mongoClient.startSession()
-  await session.withTransaction(async () => {
-    // get
-    const count = collection.countDocuments()
-    console.log(count)
+  // const session = mongoClient.startSession()
+  // await session.withTransaction(async () => {
+  //   // get
+  //   const count = collection.countDocuments()
+  //   console.log(count)
 
-    // insert
-    const ins = await collection.insertOne({
-      email: "abc@gmail.com"
-    }, {session})
-    console.log("ins", ins.insertedId)
+  //   // insert
+  //   const ins = await collection.insertOne({
+  //     email: "abc@gmail.com"
+  //   }, {session})
+  //   console.log("ins", ins.insertedId)
 
-    // update
-    const upd = await collection.updateOne({
-      _id: ins.insertedId
-    }, {
-      $set: { email: "def@gmail.com" },
-    }, {
-      session,
-    })
-    console.log("upd", upd.upsertedCount)
+  //   // update
+  //   const upd = await collection.updateOne({
+  //     _id: ins.insertedId
+  //   }, {
+  //     $set: { email: "def@gmail.com" },
+  //   }, {
+  //     session,
+  //   })
+  //   console.log("upd", upd.upsertedCount)
 
-    // get 
-    const get = await collection.find({}, {session}).toArray()
-    console.log("get", get.map(r => console.log(r)))
+  //   // get 
+  //   const get = await collection.find({}, {session}).toArray()
+  //   console.log("get", get.map(r => console.log(r)))
     
-    // delete
-    const del = await collection.deleteOne({
-      _id: ins.insertedId
-    }, {session})
-    console.log("del", del.deletedCount)
-  }, {
-    // readPreference: {
-    //   preference: ReadPreferenceMode.primary,
-    // },
-    readConcern: { level: "majority" },
-    writeConcern: { w: "majority" },
-  })
+  //   // delete
+  //   const del = await collection.deleteOne({
+  //     _id: ins.insertedId
+  //   }, {session})
+  //   console.log("del", del.deletedCount)
+  // }, {
+  //   // readPreference: {
+  //   //   preference: ReadPreferenceMode.primary,
+  //   // },
+  //   readConcern: { level: "majority" },
+  //   writeConcern: { w: "majority" },
+  // })
 
-  console.timeEnd("dbsave")
+  // console.timeEnd("dbsave")
   process.exit(0)
 }
 
