@@ -1,0 +1,31 @@
+version: "3.1"
+services:
+  db:
+    # mem_limit: 300M
+    hostname: postgres-benchmark-transaction
+    container_name: postgres-benchmark-transaction
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 15s
+      timeout: 15s
+      retries: 3
+    image: postgres:14.2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./db/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  
+  mongodb-primary:
+    hostname: mongodb-benchmark-transaction
+    container_name: mongodb-benchmark-transaction
+    image: mongo:latest
+    expose:
+      - 27017
+    ports:
+      - 27017:27017
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0"]
+    volumes:
+      - ./db/mongo/:/data/db
