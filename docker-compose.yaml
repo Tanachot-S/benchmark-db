@@ -29,3 +29,14 @@ services:
     entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0"]
     volumes:
       - ./db/mongo/:/data/db
+
+  cockroach:
+    hostname: cockroach-benchmark-transaction
+    container_name: cockroach-benchmark-transaction
+    image: cockroachdb/cockroach:latest
+    ports:
+      - "26257:26257"
+      - "8080:8080"
+    command: start-single-node --insecure --cache=1GB
+    volumes:
+      - ./db/cockroach/:/cockroach/cockroach-data
